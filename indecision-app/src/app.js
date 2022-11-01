@@ -1,64 +1,155 @@
-console.log('App.js is running!');
-
-// JSX - JavaScript XML
-
- const app = {
-   title: 'Indecision App',
-   subtitle: 'Some Random Info',
-   options: []
- }
-
- const onFormSubmit = (e) => {
-   e.preventDefault()
-   // e.target will point to the element that event started on
-      // .elements contains a list of the elements indexed by name
-   const option = e.target.elements.option.value;
-
-   if (option) {
-      app.options.push(option)
-      //reset the table button by setting the value into an empty string
-      e.target.elements.option.value = '';
-      renderIndecisionApp()
+class IndecisionApp extends React.Component {
+   constructor(props){
+      super(props);
+      this.handleDeleteOptions = this.handleDeleteOptions.bind(this)
+      this.handleAddOption = this.handleAddOption.bind(this)
+      this.handlePick = this.handlePick.bind(this)
+      this.clearCache = this.clearCache.bind(this)
+      this.state ={
+         options: []
+      }
    }
- };
 
- const removeAll = () => {
-   app.options = [];
-   renderIndecisionApp();
- }
+   handleDeleteOptions() {
+      // delete all the content of the options 
+      this.setState(() => {
+         return {
+            options : []
+         };
+      });
+   }
 
+   handlePick() {
+      const RandomNum = Math.floor(Math.random() * this.state.options.length)
+      const option = this.state.options[RandomNum];
+      alert(option)
+   }
 
- const appRoot = document.getElementById('app');
+   handleAddOption(option) {
+      if(!option) {
+         return 'Enter valid value to add item'
+      } else if (this.state.options.indexOf(option) > - 1)  {
+         return 'This option already exists'
+      } 
+         this.setState((prevState) => {
+            return {
+               options: prevState.options.concat([option])
+            }
+         });
+   }
 
- const numbers = [55, 101, 1000]
+   clearCache(e) {
+      return e.target.elements.value = ''
+   }
 
- const onMakeDecision = () => {
-   const randomNum = Math.floor(Math.random() * app.options.length);
-   const option = app.options[randomNum];
-   alert(option)
- };
+   render() {
+      const title = 'Indecision App'
+      const subtitle = "Put your life in the hands of a computer"
 
- const renderIndecisionApp = () => {
-   const template = (
+      return (
+         <div>
+         <Header title={title} subtitle={subtitle}/>
+         <Action 
+         hasOptions={this.state.options.length > 0}
+         handlePick={this.handlePick}
+         />
+         <Options
+          options={this.state.options} 
+          handleDeleteOptions={this.handleDeleteOptions}
+          />
+         <AddOption
+          handleAddOption={this.handleAddOption}
+          clearCache={this.clearCache}
+         />
+         </div>
+      )
+   }
+}
+
+class Header extends React.Component {
+   render() {
+      return (
+         <div>
+            <h1>{this.props.title}</h1>
+            <h2>{this.props.subtitle}</h2>
+         </div>
+      )
+   }
+}
+
+class Action extends React.Component {
+   render() {
+      return (
+         <div>
+            <button
+             onClick={this.props.handlePick}
+            disabled={!this.props.hasOptions}
+            >
+            What should I do?
+            </button>
+         </div>
+      )
+   }
+}
+
+class Options extends React.Component {
+   render() {
+      return (
+         <div>
+         <button onClick={this.props.handleDeleteOptions}>Remove All</button>
+         {
+            this.props.options.map((option) => <Option key={option} optionText={option}/>)
+         }
+         </div>
+      )
+   }
+}
+
+class Option extends React.Component { 
+   render() {
+      return (
       <div>
-         <h1>{app.title}</h1>
-         {app.subtitle && <p>{app.subtitle}</p>}
-        <p>{app.options.length > 0 ? 'Here are your options' : 'No options'}</p>
-        <p>{app.options.length}</p>
-        <button disabled={app.options.length === 0}onClick={onMakeDecision}>What should I do?</button>
-        <button onClick={removeAll}>Remove All</button>
-         <ol>
-           {
-            app.options.map((option) => <li key={option}>{option}</li>)
-           }
-         </ol>
-         <form onSubmit={onFormSubmit}>
-         <input type="text" name="option"/>
-         <button>Add Option</button>
-         </form>
+         {this.props.optionText}
       </div>
-      );
-      ReactDOM.render(template, appRoot);
- }
+      )
+   }
+}
 
- renderIndecisionApp()
+
+class AddOption extends React.Component {
+   constructor(props) {
+      super(props)
+      this.handleAddOption = this.handleAddOption.bind(this)
+      this.state = {
+         error: undefined
+      };
+   }
+   handleAddOption(e) {
+      e.preventDefault();
+      const option = e.target.elements.option.value.trim();
+      const error = this.props.handleAddOption(option);
+
+      this.setState(() => {
+         return {
+            error, //error: error
+         }
+      })
+
+   }
+
+   render() {
+      return (
+         <div>
+            {this.state.error && <p>{this.state.error}</p>}
+            <form onSubmit={this.handleAddOption}>
+               <input type="text" name='option' placeholder="Input options">
+               </input>
+               <button>Add Option</button>
+            </form>
+         </div>
+      )
+   }
+
+}
+
+ReactDOM.render(<IndecisionApp/>, document.getElementById('app'));
