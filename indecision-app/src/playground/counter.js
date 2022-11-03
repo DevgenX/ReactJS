@@ -1,5 +1,5 @@
 class Counter extends React.Component {
-  constructor(props) {
+  constructor(props) { 
     super(props)
     this.handleAddOne = this.handleAddOne.bind(this)
     this.handleMinusOne = this.handleMinusOne.bind(this)
