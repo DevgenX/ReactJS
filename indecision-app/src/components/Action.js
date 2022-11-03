@@ -3,8 +3,7 @@ import React from 'react';
 
 // Action provides the two buttons 
     // handle pick randomly selects an option
-const Action = (props) => {
-    return (
+const Action = (props) => (
        <div>
           <button
            onClick={props.handlePick}
@@ -14,6 +13,6 @@ const Action = (props) => {
           </button>
        </div>
     )
- };
+
  
  export default Action;

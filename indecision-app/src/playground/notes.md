@@ -73,3 +73,19 @@ return `Hi, my name is ${this.name}`
 const newSyntax = new NewSyntax();
 const newGetGreeting = newSyntax.getGreeting;
 console.log(newGetGreeting())
+
+#### Passing Children to component
+
+const Layout = (props) => {
+return (
+<div>
+<p>header</p>
+{props.children}
+<p>footer</p>
+</div>
+);
+}
+
+ReactDOM.render(<IndecisionApp content={Layout}/>, document.getElementById('app'));
+
+// passed JSX in a component
