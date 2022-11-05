@@ -16,6 +16,14 @@ module.exports = {
             loader: 'babel-loader',
             test: /\.js$/,
             exclude: /node_modules/
+        }, {
+            test:/\.s?css$/,
+            use: [
+                'style-loader',
+                'css-loader',
+                'sass-loader'
+            ]
+
         }]
     },
     // makes the source code be the original source code
@@ -24,3 +32,4 @@ module.exports = {
         static: path.join(__dirname, 'public')
     }
 };
+

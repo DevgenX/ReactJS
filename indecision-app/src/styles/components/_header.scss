@@ -1,0 +1,28 @@
+.header {
+    color:white;
+    background: $off-black;
+    // space in the bottom
+    margin-bottom: $m-size;
+    // space of the elements in the header, bottom to top and 0 on left and right
+    padding: $m-size;
+}
+
+//BEM naming convention 
+.header__title {
+    font-size: $l-size;
+    margin:0;
+}
+
+.header__subtitle {
+    color: $off-white;
+    font-size: $m-size;
+    // thickness of the font
+    font-weight: 500;
+    margin:0;
+}
+
+@media (min-width: $desktop-breakpoint) {
+    .header {
+        margin-bottom: $xl-size;
+    }
+}

@@ -1,0 +1,26 @@
+
+// 62.5% of the current size set
+// 16 . 62.5
+html {
+    font-size: 62.5%
+}
+
+
+body {
+    background: $off-dark;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: $m-size;
+}
+
+// All buttons
+button {
+    cursor: pointer;
+}
+
+button:disabled {
+    cursor: default;
+}
+
+button:hover {
+    color: darken($purple-button, 10%)
+}
