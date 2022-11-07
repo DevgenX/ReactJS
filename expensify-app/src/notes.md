@@ -18,3 +18,17 @@
 
 - Doesn't cause full page request and makes things faster.
 - Client side routing internally use LINK as opposed to the anchor tag.
+
+# REDUCERS
+
+1. Reducers are pure functions
+2. Never change state or action / don't mutate actions
+3. Doesn't get affected outside variables
+
+- (e.g const add =(a,b) => a + b)
+
+# combineReducers
+
+- Call combine reducer passing the return value into the create store
+- defined what our store to look like
+- We have object, expenses and filters managed by their respective reducer
