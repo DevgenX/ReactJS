@@ -1,18 +1,20 @@
 import React from 'react';
 import moment from 'moment';
-
+import { SingleDatePicker } from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css'
+import 'react-dates/initialize';
 
 const now = moment();
 
-console.log(now)
 
 
 export default class ExpenseForm extends React.Component {
     state = {
         description : '',
         note : '',
-        amount : ''
-
+        amount : '',
+        createdAt: moment(),
+        calendarFocused: false
     };
     onNoteChange = (e) => {
         // optional 
@@ -33,15 +35,43 @@ export default class ExpenseForm extends React.Component {
         const amount = e.target.value;
         // 2 decimal points and only numbers, match can only be matched with the format given
             // by the regEx
-        if (amount.match(/^\d*(\.\d{0,2})?$/)) {
+        if (!amount || amount.match(/^\d{1,}(\.\d{0,2})?$/)) {
             this.setState(() => ( { amount } ))
         }
     };
+    onDateChange = (createdAt) => {
+
+        if(createdAt) {
+            this.setState(() => ( { createdAt } ))
+        }
+    }
+
+    onFocusChange = ({ focused }) => {
+        this.setState(() => ({ calendarFocused : focused }));
+    };
+
+    onSubmit = (e) => {
+        e.preventDefault();
+
+        if (!this.state.description || !this.state.amount) {
+            this.setState(() => ({ error: 'Please provide a description and amount' } ))
+        } else {
+            this.setState(() => ({ error: '' }))
+            this.props.onSubmit({ 
+                description: this.state.description,
+                amount: parseFloat(this.state.amount, 10) * 100,
+                createdAt: this.state.createdAt.valueOf(),
+                note: this.state.note
+            })
+        }
+
+    }
 
     render () {
         return (
             <div>
-                <form>
+            {this.state.error && <p>{this.state.error}</p>}
+                <form onSubmit={this.onSubmit}>
                     <input 
                     type="text"
                     placeholder='Description'
@@ -54,6 +84,15 @@ export default class ExpenseForm extends React.Component {
                         placeholder="Amount"
                         value={this.state.amount}
                         onChange={this.onAmountChange}
+                    />
+                    <SingleDatePicker 
+                    date={this.state.createdAt}
+                    onDateChange={this.onDateChange}
+                    focused={this.state.calendarFocused}
+                    onFocusChange={this.onFocusChange}
+                    numberOfMonths={1}
+                    // make every single day available
+                    isOutsideRange={() => false}
                     />
                     <textarea
                     placeholder="Add a note for your expense(optional)"
