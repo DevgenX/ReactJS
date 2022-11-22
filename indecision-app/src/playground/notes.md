@@ -78,6 +78,7 @@ console.log(newGetGreeting())
 
 const Layout = (props) => {
 return (
+
 <div>
 <p>header</p>
 {props.children}
